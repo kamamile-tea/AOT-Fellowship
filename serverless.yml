@@ -6,8 +6,6 @@ provider:
   profile: eagle
   environment:
     SHOWTIME_TABLE: ${self:custom.showtimeTableName}
-  iam:
-    role: "aotLambdaRole"
 
 custom:
   showtimeTableName: "aot_showtime"
@@ -20,6 +18,7 @@ custom:
 functions:
   showtime:
     handler: src/handler.showtime
+    role: aotLambdaRole
     events:
       - http:
           path: createShowtime
