@@ -20,19 +20,16 @@ This template demonstrates how to deploy a NodeJS function running on AWS Lambda
 ### Local development
 
 1. Run npm install
-2. Install serverless offline plugin
 
-- serverless plugin install -n serverless-offline
-
-3. Set up local DynamoDB
+2. Set up local DynamoDB
 
 - sls dynamodb install
 
-4. Start local sever
+3. Start local sever
 
 - sls offline start
 
-5. Use Postman to call your local server
+4. Use Postman to call your local server
 
 ### AWS Configuration
 
