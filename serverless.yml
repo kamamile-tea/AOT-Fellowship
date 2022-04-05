@@ -3,7 +3,7 @@ service: aot-fellowship-demo
 provider:
   name: aws
   runtime: nodejs14.x
-  profile: eagle
+  profile: eagle # Update this with your own profile. See https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html for more info
   environment:
     SHOWTIME_TABLE: ${self:custom.showtimeTableName}
 
