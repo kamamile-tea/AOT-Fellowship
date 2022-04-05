@@ -11,12 +11,24 @@ authorName: 'Serverless, inc.'
 authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
 -->
 
-
 # Serverless Framework AWS NodeJS Example
 
 This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework. The deployed function does not include any event definitions as well as any kind of persistence (database). For more advanced configurations check out the [examples repo](https://github.com/serverless/examples/) which includes integrations with SQS, DynamoDB or examples of functions that are triggered in `cron`-like manner. For details about configuration of specific `events`, please refer to our [documentation](https://www.serverless.com/framework/docs/providers/aws/events/).
 
 ## Usage
+
+### Local development
+
+1. Run npm install
+2. Set up local DynamoDB
+
+- sls dynamodb install
+
+3. Start local sever
+
+- sls offline start
+
+4. Use Postman to call your local server
 
 ### Deployment
 
@@ -29,44 +41,18 @@ $ serverless deploy
 After running deploy, you should see output similar to:
 
 ```bash
-Deploying aws-node-project to stage dev (us-east-1)
+Deploying aot-fellowship-demo to stage dev (us-east-1)
 
-✔ Service deployed to stack aws-node-project-dev (112s)
+✔ Service deployed to stack aot-fellowship-demo-dev (112s)
 
 functions:
-  hello: aws-node-project-dev-hello (1.5 kB)
+  showtime: aot-fellowship-demo-dev-showtime (1.5 kB)
 ```
 
 ### Invocation
 
-After successful deployment, you can invoke the deployed function by using the following command:
+After successful deployment, the url for your api will be in the command line
 
-```bash
-serverless invoke --function hello
-```
+- example: https://gp1ux2he8d.execute-api.us-east-1.amazonaws.com/dev/
 
-Which should result in response similar to the following:
-
-```json
-{
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": {}\n}"
-}
-```
-
-### Local development
-
-You can invoke your function locally by using the following command:
-
-```bash
-serverless invoke local --function hello
-```
-
-Which should result in response similar to the following:
-
-```
-{
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
-}
-```
+Use Postman to call your api endpoints

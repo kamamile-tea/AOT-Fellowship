@@ -3,7 +3,14 @@ const uuid = require("uuid");
 
 module.exports.showtime = async (event) => {
   const showtimeTable = process.env.SHOWTIME_TABLE;
-  const dynamoDbClient = new AWS.DynamoDB.DocumentClient();
+
+  const dynamoDbClientParams = {};
+  if (process.env.IS_OFFLINE) {
+    dynamoDbClientParams.region = "localhost";
+    dynamoDbClientParams.endpoint = "http://localhost:8000";
+  }
+
+  const dynamoDbClient = new AWS.DynamoDB.DocumentClient(dynamoDbClientParams);
 
   let body, response;
 

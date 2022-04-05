@@ -11,6 +11,11 @@ provider:
 
 custom:
   showtimeTableName: "aot_showtime"
+  dynamodb:
+    start:
+      migrate: true
+    stages:
+      - dev
 
 functions:
   showtime:
@@ -94,3 +99,7 @@ resources:
                   Action:
                     - "dynamodb:*"
                   Resource: "*"
+
+plugins:
+  - serverless-offline
+  - serverless-dynamodb-local

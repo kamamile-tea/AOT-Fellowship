@@ -26,3 +26,4 @@ vendor
 ./bin/Debug/netcoreapp2.1/
 ./bin/release/netcoreapp2.1/
 package-lock.json
+.dynamodb

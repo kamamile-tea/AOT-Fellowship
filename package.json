@@ -6,7 +6,11 @@
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.1106.0",
-    "serverless": "^3.10.2",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "serverless": "^3.11.0",
+    "serverless-dynamodb-local": "^0.2.35",
+    "serverless-offline": "^8.5.0"
   }
 }
