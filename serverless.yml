@@ -1,11 +1,96 @@
-service: aot-fellowship-demo # NOTE: update this with your service name
-
-frameworkVersion: '3'
+service: aot-fellowship-demo
 
 provider:
   name: aws
   runtime: nodejs14.x
+  profile: eagle
+  environment:
+    SHOWTIME_TABLE: ${self:custom.showtimeTableName}
+  iam:
+    role: "aotLambdaRole"
+
+custom:
+  showtimeTableName: "aot_showtime"
 
 functions:
-  hello:
-    handler: src/handler.hello
+  showtime:
+    handler: src/handler.showtime
+    events:
+      - http:
+          path: createShowtime
+          method: post
+          cors: true
+          private: false
+      - http:
+          path: getShowtime
+          method: get
+          cors: true
+          private: false
+          request:
+            parameters:
+              querystrings:
+                title: true
+
+resources:
+  Resources:
+    AotShowtimeTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: title
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.showtimeTableName}
+        GlobalSecondaryIndexes:
+          - IndexName: titleIndex
+            KeySchema:
+              - AttributeName: title
+                KeyType: HASH
+            Projection:
+              ProjectionType: "KEYS_ONLY"
+    aotLambdaRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: aotLambdaPolicy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogStream
+                    - logs:CreateLogGroup
+                  Resource:
+                    - "Fn::Join":
+                        - ":"
+                        - - "arn:aws:logs"
+                          - Ref: "AWS::Region"
+                          - Ref: "AWS::AccountId"
+                          - "log-group:/aws/lambda/aot-fellowship-demo-dev*:*"
+                - Effect: Allow
+                  Action:
+                    - logs:PutLogEvents
+                  Resource:
+                    - "Fn::Join":
+                        - ":"
+                        - - "arn:aws:logs"
+                          - Ref: "AWS::Region"
+                          - Ref: "AWS::AccountId"
+                          - "log-group:/aws/lambda/aot-fellowship-demo-dev*:*:*"
+                - Effect: Allow
+                  Action:
+                    - "dynamodb:*"
+                  Resource: "*"
