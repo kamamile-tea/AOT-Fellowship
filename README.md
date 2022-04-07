@@ -12,7 +12,7 @@
 
 4. Create a github account (if you don't already have one) https://github.com/
 
-5. Go to the project repo: https://github.com/ajohnson10209/AOT-Fellowship and fork the repo (Slide 35).
+5. Go to the project repo: https://github.com/ajohnson10209/AOT-Fellowship and fork the repo (Slide 36).
 
 6. Clone the repo
 
