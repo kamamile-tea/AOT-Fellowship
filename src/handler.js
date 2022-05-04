@@ -20,12 +20,16 @@ module.exports.showtime = async (event) => {
 
   if (event.path === "/createShowtime") {
     response = await createShowtime(dynamoDbClient, showtimeTable, body);
-  } else if (event.path === "/getShowtime") {
+  }
+  else if (event.path === "/getShowtime") {
     response = await getShowtime(
       dynamoDbClient,
       showtimeTable,
       event.queryStringParameters.title
     );
+  }
+  else if(event.path === "/getAllShowtimes") {
+    response = await getAllShowtimes(dynamoDbClient, showtimeTable);
   }
 
   return {
@@ -34,6 +38,48 @@ module.exports.showtime = async (event) => {
   };
 };
 
+//function to get all show times from a given  table
+const getAllShowtimes = async (db, table) => {
+  let statusCode;
+  const response = {};
+
+  const params = {
+    TableName: table,
+    KeyConditionExpression: "id  = :i",
+    ExpressionAttributeValues: {
+      ":i": " ",
+    },
+
+  };
+
+  try{
+    const { Items } = await db.query(params).promise();
+
+    if(Items.length){
+      console.log("Items", Items);
+
+      statusCode = 200;
+      response.data = Items;
+    }
+    else{
+      statusCode = 404;
+      console.log("Nothing here...");
+      response.data = [];
+    }
+  }
+  catch(error){
+    response.message = "Error", error;
+
+    statusCode = 400;
+    console.log(error);
+  }
+  return {
+    statusCode,
+    response,
+  };
+}
+
+//Function to create show time given a body
 const createShowtime = async (db, table, body) => {
   const uuidv4 = uuid.v4;
   let statusCode;
@@ -63,7 +109,9 @@ const createShowtime = async (db, table, body) => {
   };
 };
 
+// Function to get a showtime based on a given title
 const getShowtime = async (db, table, title) => {
+
   let statusCode;
   const response = {};
 

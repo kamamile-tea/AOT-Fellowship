@@ -3,7 +3,7 @@ service: aot-fellowship-demo
 provider:
   name: aws
   runtime: nodejs14.x
-  #profile: default # Update this with your own profile if necessary. See https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html for more info
+  profile: default # Update this with your own profile if necessary. See https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html for more info
   environment:
     SHOWTIME_TABLE: ${self:custom.showtimeTableName}
 
@@ -34,6 +34,11 @@ functions:
             parameters:
               querystrings:
                 title: true
+      - http:
+          path: getAllShowtimes
+          method: get
+          cors: true
+          private: false
 
 resources:
   Resources:
@@ -56,7 +61,7 @@ resources:
               - AttributeName: title
                 KeyType: HASH
             Projection:
-              ProjectionType: "KEYS_ONLY"
+              ProjectionType: "ALL"
     aotLambdaRole:
       Type: AWS::IAM::Role
       Properties:
